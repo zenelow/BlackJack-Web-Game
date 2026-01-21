@@ -10,6 +10,8 @@
   const btnReset = $(".js-btn-reset");
   const btnHit = $(".js-btn-hit");
   const btnStand = $(".js-btn-stand");
+  const dealerHand = $(".js-dealer-hand");
+  const playerHand = $(".js-player-hand");
 
   if (!betRange || !betAmount || !hudBet || !tableBet || !btnDeal || !btnReset || !statusLabel) return;
 
@@ -23,8 +25,40 @@
   const max = Number(betRange.max || 500);
   const step = Number(betRange.step || 1);
 
+  const ROUND = Object.freeze({
+    BETTING: "BETTING",
+    IN_ROUND: "IN_ROUND",
+    ROUND_OVER: "ROUND_OVER",
+  });
+
+  let roundState = ROUND.BETTING;
   let betLocked = false;
   let currentBet = 0;
+
+  function clearHand(el) {
+    if (!el) return;
+    el.innerHTML = "";
+  }
+
+  function addCardPlaceholder(el, { ghost = false } = {}) {
+    if (!el) return;
+    const d = document.createElement("div");
+    d.className = ghost ? "card-slot card-slot--ghost" : "card-slot";
+    el.appendChild(d);
+  }
+
+  function setupRoundPlaceholders() {
+    // Visual-only: no real deck logic yet.
+    clearHand(dealerHand);
+    clearHand(playerHand);
+    addCardPlaceholder(dealerHand);
+    addCardPlaceholder(dealerHand);
+    addCardPlaceholder(dealerHand, { ghost: true });
+
+    addCardPlaceholder(playerHand);
+    addCardPlaceholder(playerHand);
+    addCardPlaceholder(playerHand, { ghost: true });
+  }
 
   function applyBetToUI(n, source) {
     if (betLocked) return;
@@ -68,11 +102,24 @@
 
   function resetBetUI() {
     betLocked = false;
+    roundState = ROUND.BETTING;
     betRange.disabled = false;
     betAmount.disabled = false;
     btnHit && (btnHit.disabled = true);
     btnStand && (btnStand.disabled = true);
     setBet(0);
+
+    // Return hands to the simple placeholders (empty round)
+    if (dealerHand || playerHand) {
+      clearHand(dealerHand);
+      clearHand(playerHand);
+      addCardPlaceholder(dealerHand);
+      addCardPlaceholder(dealerHand);
+      addCardPlaceholder(dealerHand, { ghost: true });
+      addCardPlaceholder(playerHand);
+      addCardPlaceholder(playerHand);
+      addCardPlaceholder(playerHand, { ghost: true });
+    }
   }
 
   betRange.addEventListener("input", (e) => setBet(e.target.value, "range"));
@@ -81,13 +128,43 @@
 
   btnDeal.addEventListener("click", () => {
     if (currentBet <= 0) return;
+    if (roundState !== ROUND.BETTING) return;
     betLocked = true;
     betRange.disabled = true;
     betAmount.disabled = true;
-    statusLabel.textContent = "Bet placed";
+    roundState = ROUND.IN_ROUND;
+    statusLabel.textContent = "In round";
+    setupRoundPlaceholders();
     if (btnHit) btnHit.disabled = false;
     if (btnStand) btnStand.disabled = false;
   });
+
+  if (btnHit) {
+    btnHit.addEventListener("click", () => {
+      if (roundState !== ROUND.IN_ROUND) return;
+      // Visual-only: add a card to player hand up to a reasonable limit
+      if (!playerHand) return;
+      const cardCount = playerHand.querySelectorAll(".card-slot:not(.card-slot--ghost)").length;
+      if (cardCount >= 6) return;
+
+      // Remove ghost, add a new real card, then add ghost back
+      const ghost = playerHand.querySelector(".card-slot--ghost");
+      ghost && ghost.remove();
+      addCardPlaceholder(playerHand);
+      addCardPlaceholder(playerHand, { ghost: true });
+      statusLabel.textContent = "Hit";
+    });
+  }
+
+  if (btnStand) {
+    btnStand.addEventListener("click", () => {
+      if (roundState !== ROUND.IN_ROUND) return;
+      roundState = ROUND.ROUND_OVER;
+      if (btnHit) btnHit.disabled = true;
+      if (btnStand) btnStand.disabled = true;
+      statusLabel.textContent = "Round over — press Reset";
+    });
+  }
 
   btnReset.addEventListener("click", () => {
     statusLabel.textContent = "Waiting for bet";
