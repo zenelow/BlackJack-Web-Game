@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blackjack</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <meta name="color-scheme" content="dark" />
+  </head>
+  <body>
+    <div class="bg">
+      <header class="topbar" role="banner">
+        <div class="topbar__left">
+          <div class="brand">
+            <div class="brand__mark" aria-hidden="true">♠</div>
+            <div class="brand__text">
+              <div class="brand__title">Blackjack</div>
+              <div class="brand__subtitle">Single Table • Classic Rules</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar__center" aria-label="Table status">
+          <div class="status">
+            <div class="status__pill" title="Round status">
+              <span class="status__dot" aria-hidden="true"></span>
+              <span class="status__label">Waiting for bet</span>
+            </div>
+            <div class="status__meta">
+              <span class="status__kv"><span class="muted">Deck:</span> 1</span>
+              <span class="status__sep" aria-hidden="true">•</span>
+              <span class="status__kv"><span class="muted">Min:</span> $5</span>
+              <span class="status__sep" aria-hidden="true">•</span>
+              <span class="status__kv"><span class="muted">Max:</span> $500</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar__right">
+          <div class="hud" aria-label="Player HUD">
+            <div class="hud__item">
+              <div class="hud__label">Balance</div>
+              <div class="hud__value" id="hud-balance">$1,000</div>
+            </div>
+            <div class="hud__divider" aria-hidden="true"></div>
+            <div class="hud__item">
+              <div class="hud__label">Bet</div>
+              <div class="hud__value" id="hud-bet">$0</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout" role="main">
+        <section class="table" aria-label="Blackjack table">
+          <div class="table__rim" aria-hidden="true"></div>
+          <div class="table__felt">
+            <div class="table__inner">
+              <div class="table__glow" aria-hidden="true"></div>
+
+              <div class="table__grid" aria-label="Table layout">
+                <div class="table__row table__row--dealer" aria-label="Dealer area">
+                  <div class="seat seat--dealer">
+                    <div class="seat__header">
+                      <div class="seat__name">Dealer</div>
+                    </div>
+                    <div class="hand hand--dealer" aria-label="Dealer hand placeholder">
+                      <div class="hand__slots" aria-hidden="true">
+                        <div class="card-slot"></div>
+                        <div class="card-slot"></div>
+                        <div class="card-slot card-slot--ghost"></div>
+                      </div>
+                      <div class="hand__hint muted">Dealer hand</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="table__center" aria-label="Table center">
+                  <div class="centerline" aria-hidden="true"></div>
+                  <div class="bet" aria-label="Bet controls (visual only)">
+                    <div class="bet__top">
+                      <div class="bet__label muted">Bet</div>
+                      <div class="bet__value" id="table-bet">$0</div>
+                    </div>
+                    <div class="bet__controls">
+                      <input
+                        class="bet__range"
+                        id="bet-range"
+                        type="range"
+                        min="5"
+                        max="500"
+                        step="5"
+                        value="0"
+                        aria-label="Bet slider"
+                      />
+                      <div class="bet__inputs">
+                        <span class="bet__prefix" aria-hidden="true">$</span>
+                        <input
+                          class="bet__number"
+                          id="bet-amount"
+                          type="number"
+                          min="0"
+                          max="500"
+                          step="5"
+                          value="0"
+                          inputmode="numeric"
+                          aria-label="Bet amount"
+                        />
+                        <div class="bet__hint muted">$5–$500</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="controls" aria-label="Action buttons (visual only)">
+                    <button class="btn btn--primary" type="button">Deal</button>
+                    <button class="btn" type="button" disabled>Hit</button>
+                    <button class="btn" type="button" disabled>Stand</button>
+                    <button class="btn btn--ghost" type="button">Reset</button>
+                  </div>
+                </div>
+
+                <div class="table__row table__row--player" aria-label="Player area">
+                  <div class="seat seat--player">
+                    <div class="seat__header">
+                      <div class="seat__name">You</div>
+                    </div>
+                    <div class="hand hand--player" aria-label="Player hand placeholder">
+                      <div class="hand__slots" aria-hidden="true">
+                        <div class="card-slot"></div>
+                        <div class="card-slot"></div>
+                        <div class="card-slot card-slot--ghost"></div>
+                      </div>
+                      <div class="hand__hint muted">Your hand</div>
+                    </div>
+                  </div>
+                </div>
+
+                <footer class="table__footer" aria-label="Table footer"></footer>
+
+                <aside class="side" aria-label="Right side panel">
+                  <div class="side__card">
+                    <div class="side__title muted">Deck</div>
+                    <div class="deck__stack" aria-hidden="true">
+                      <div class="deck__card deck__card--1"></div>
+                      <div class="deck__card deck__card--2"></div>
+                      <div class="deck__card deck__card--3"></div>
+                      <div class="deck__card deck__card--top"></div>
+                    </div>
+                    <div class="deck__meta muted">
+                      <span>Remaining</span>
+                      <span class="deck__count">52</span>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="page-footer" role="contentinfo">
+        <div class="page-footer__inner">
+          <span class="muted">Simple UI skeleton — gameplay will be wired in later.</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JS intentionally left untouched; you can wire these elements later -->
+    <script src="scripts/main.js" defer></script>
+  </body>
+</html>
