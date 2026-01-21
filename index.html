@@ -24,7 +24,7 @@
           <div class="status">
             <div class="status__pill" title="Round status">
               <span class="status__dot" aria-hidden="true"></span>
-              <span class="status__label">Waiting for bet</span>
+              <span class="status__label js-status-label">Waiting for bet</span>
             </div>
             <div class="status__meta">
               <span><span class="muted">Deck:</span> 1</span>
@@ -40,12 +40,12 @@
           <div class="hud" aria-label="Player HUD">
             <div>
               <div class="hud__label">Balance</div>
-              <div class="hud__value" id="hud-balance">$1,000</div>
+              <div class="hud__value js-hud-balance">$1,000</div>
             </div>
             <div class="hud__divider" aria-hidden="true"></div>
             <div>
               <div class="hud__label">Bet</div>
-              <div class="hud__value" id="hud-bet">$0</div>
+              <div class="hud__value js-hud-bet">$0</div>
             </div>
           </div>
         </div>
@@ -80,12 +80,11 @@
                   <div class="bet" aria-label="Bet controls (visual only)">
                     <div class="bet__top">
                       <div class="bet__label muted">Bet</div>
-                      <div class="bet__value" id="table-bet">$0</div>
+                      <div class="bet__value js-table-bet">$0</div>
                     </div>
                     <div class="bet__controls">
                       <input
-                        class="bet__range"
-                        id="bet-range"
+                        class="bet__range js-bet-range"
                         type="range"
                         min="5"
                         max="500"
@@ -96,8 +95,7 @@
                       <div class="bet__inputs">
                         <span class="bet__prefix" aria-hidden="true">$</span>
                         <input
-                          class="bet__number"
-                          id="bet-amount"
+                          class="bet__number js-bet-amount"
                           type="number"
                           min="0"
                           max="500"
@@ -112,10 +110,10 @@
                   </div>
 
                   <div class="controls" aria-label="Action buttons (visual only)">
-                    <button class="btn btn--primary" type="button">Deal</button>
-                    <button class="btn" type="button" disabled>Hit</button>
-                    <button class="btn" type="button" disabled>Stand</button>
-                    <button class="btn btn--ghost" type="button">Reset</button>
+                    <button class="btn btn--primary js-btn js-btn-deal" type="button" disabled>Deal</button>
+                    <button class="btn js-btn js-btn-hit" type="button" disabled>Hit</button>
+                    <button class="btn js-btn js-btn-stand" type="button" disabled>Stand</button>
+                    <button class="btn btn--ghost js-btn js-btn-reset" type="button">Reset</button>
                   </div>
                 </div>
 
@@ -165,7 +163,6 @@
       </footer>
     </div>
 
-    <!-- JS intentionally left untouched; you can wire these elements later -->
-    <script src="scripts/main.js" defer></script>
+    <script type="module" src="scripts/main.js"></script>
   </body>
 </html>
